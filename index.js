@@ -12,6 +12,11 @@ var pg = require('pg');
 var pool = new pg.Pool(config)
 console.log(config);
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
 
 
 function printMsg() {
