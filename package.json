@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/claireellul/databasecode/issues"
   },
-  "homepage": "https://github.com/claireellul/databasecode#readme"
+  "homepage": "https://github.com/claireellul/databasecode#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "fs": "0.0.1-security",
+    "pg": "^7.4.1"
+  }
 }
