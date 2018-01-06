@@ -120,8 +120,36 @@ function generateGeoJSON(req, res){
     });
 }
 
+function uploadData(req,res) {
+	// note that we are using POST here as we are uploading data
+	// so the parameters form part of the BODY of the request rather than the RESTful API
+	console.dir(req.body);
+ 	pool.connect(function(err,client,done) {
+       	if(err){
+          	console.log("not able to get connection "+ err);
+           	res.status(400).send(err);
+       	} 
 
+        // pull the geometry component together
+        // note that well known text requires the points as longitude/latitude !
+        // well known text should look like: 'POINT(-71.064544 42.28787)'
+        var geometrystring = "st_geomfromtext('POINT(" + req.body.longitude + " " + req.body.latitude + ")'";
 
+		var querystring = "INSERT into formdata (name,surname,module,language, modulelist, lecturetime, geom) values ('";
+		querystring = querystring + req.body.name + "','" + req.body.surname + "','" + req.body.module + "','";
+		querystring = querystring + req.body.language + "','" + req.body.modulelist + "','" + req.body.lecturetime+"',"+geometrystring + "))";
+		console.log(querystring);
+		client.query( querystring,function(err,result) {
+	done(); 
+	if(err){
+	     console.log(err);
+	     res.status(400).send(err);
+	}
+	res.status(200).send("row inserted");
+       });
+    });
+
+}
 
 
 // the module.exports line gives a list of any of the functions in the module that can be called 
@@ -130,6 +158,6 @@ module.exports = {
     printMsg: printMsg,
     simpleQuery: simpleQuery,
     getPOI: getPOI,
-    generateGeoJSON: generateGeoJSON
-
+    generateGeoJSON: generateGeoJSON,
+    uploadData, uploadData
 }; 
